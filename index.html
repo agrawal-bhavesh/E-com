@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopSphere - Premium E-Commerce Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#60a5fa',
+                        accent: '#1d4ed8',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .skeleton-loader {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            50% {
+                opacity: .5;
+            }
+        }
+        
+        .cart-panel {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .cart-panel.open {
+            transform: translateX(0);
+        }
+        
+        .product-zoom {
+            transition: transform 0.3s ease;
+        }
+        
+        .product-zoom:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-accent">ShopSphere</a>
+                </div>
+                
+                <!-- Primary Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-dark hover:text-accent font-medium">Home</a>
+                    <a href="#" class="text-dark hover:text-accent font-medium">Products</a>
+                    <a href="#" class="text-dark hover:text-accent font-medium">New Arrivals</a>
+                    <a href="#" class="text-dark hover:text-accent font-medium">Categories</a>
+                    <a href="#" class="text-dark hover:text-accent font-medium">Deals</a>
+                </div>
+                
+                <!-- Icons -->
+                <div class="flex items-center space-x-6">
+                    <button class="text-dark hover:text-accent">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                    <button class="text-dark hover:text-accent relative" id="cart-toggle">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    <button class="text-dark hover:text-accent">
+                        <i class="fas fa-user text-lg"></i>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu" class="md:hidden text-dark">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobile-nav" class="md:hidden hidden bg-white shadow-md">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#" class="text-dark block px-3 py-2 rounded-md font-medium hover:bg-gray-50">Home</a>
+                <a href="#" class="text-dark block px-3 py-2 rounded-md font-medium hover:bg-gray-50">Products</a>
+                <a href="#" class="text-dark block px-3 py-2 rounded-md font-medium hover:bg-gray-50">New Arrivals</a>
+                <a href="#" class="text-dark block px-3 py-2 rounded-md font-medium hover:bg-gray-50">Categories</a>
+                <a href="#" class="text-dark block px-3 py-2 rounded-md font-medium hover:bg-gray-50">Deals</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary to-accent text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+            <div class="md:flex items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
+                        Summer Collection 2023
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        Discover our latest collection of premium products with special discounts
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-white text-accent font-bold px-8 py-3 rounded-md shadow-lg hover:bg-gray-100 transition-colors">
+                            Shop Now
+                        </a>
+                        <a href="#" class="border-2 border-white text-white font-bold px-8 py-3 rounded-md hover:bg-white hover:text-accent transition-colors">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="absolute -top-6 -left-6 w-full h-full rounded-2xl border-4 border-white opacity-20"></div>
+                        <div class="relative w-80 h-80 bg-gray-200 rounded-2xl overflow-hidden">
+                            <!-- Hero Image Placeholder -->
+                            <div class="w-full h-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center">
+                                <i class="fas fa-tshirt text-8xl opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12 text-dark">Shop by Category</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Category 1 -->
+                <div class="bg-light rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-40 flex items-center justify-center bg-gradient-to-br from-pink-200 to-rose-300">
+                        <i class="fas fa-tshirt text-5xl text-rose-600"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-dark mb-2">Clothing</h3>
+                        <p class="text-gray-600 mb-4">T-shirts, Jackets, Accessories</p>
+                        <a href="#" class="text-primary font-medium flex items-center">
+                            Shop Now
+                            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="bg-light rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-40 flex items-center justify-center bg-gradient-to-br from-amber-200 to-orange-300">
+                        <i class="fas fa-laptop text-5xl text-amber-700"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-dark mb-2">Electronics</h3>
+                        <p class="text-gray-600 mb-4">Laptops, Phones, Gadgets</p>
+                        <a href="#" class="text-primary font-medium flex items-center">
+                            Shop Now
+                            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Category 3 -->
+                <div class="bg-light rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-40 flex items-center justify-center bg-gradient-to-br from-teal-200 to-emerald-300">
+                        <i class="fas fa-home text-5xl text-emerald-700"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-dark mb-2">Home & Living</h3>
+                        <p class="text-gray-600 mb-4">Furniture, Decor, Lighting</p>
+                        <a href="#" class="text-primary font-medium flex items-center">
+                            Shop Now
+                            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Category 4 -->
+                <div class="bg-light rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-40 flex items-center justify-center bg-gradient-to-br from-violet-200 to-purple-300">
+                        <i class="fas fa-dumbbell text-5xl text-purple-700"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-dark mb-2">Fitness</h3>
+                        <p class="text-gray-600 mb-4">Equipment, Wearables, Supplements</p>
+                        <a href="#" class="text-primary font-medium flex items-center">
+                            Shop Now
+                            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-dark">Featured Products</h2>
+                <a href="#" class="text-primary font-medium flex items-center">
+                    View All Products
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 product-zoom">
+                    <div class="relative">
+                        <div class="h-60 bg-gradient-to-r from-cyan-100 to-blue-200 flex items-center justify-center relative">
+                            <img class="h-40 w-40 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230075FF' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%230075FF' opacity='0.5'/%3E%3C/svg%3E" alt="Wireless Headphones">
+                            <div class="absolute top-4 right-4">
+                                <span class="bg-accent text-white text-xs font-bold px-2 py-1 rounded">HOT</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-lg font-bold text-dark">Wireless Headphones</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Premium Sound Quality</p>
+                                </div>
+                                <div>
+                                    <span class="text-xl font-bold text-accent">$89.99</span>
+                                    <span class="line-through text-gray-400 text-sm block">$129.99</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <button class="bg-primary hover:bg-accent text-white py-2 px-4 rounded-lg flex items-center transition-colors">
+                                    <i class="fas fa-shopping-cart mr-2"></i>
+                                    Add to Cart
+                                </button>
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="far fa-heart text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 product-zoom">
+                    <div class="h-60 bg-gradient-to-r from-rose-100 to-pink-200 flex items-center justify-center">
+                        <img class="h-40 w-40 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FF0071' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FF0071' opacity='0.5'/%3E%3C/svg%3E" alt="Smart Watch">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-bold text-dark">Smart Watch</h3>
+                                <p class="text-gray-600 text-sm mt-1">Track Fitness & Health</p>
+                            </div>
+                            <div>
+                                <span class="text-xl font-bold text-accent">$129.99</span>
+                                <span class="line-through text-gray-400 text-sm block">$159.99</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button class="bg-primary hover:bg-accent text-white py-2 px-4 rounded-lg flex items-center transition-colors">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Add to Cart
+                            </button>
+                            <button class="text-gray-500 hover:text-primary">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 product-zoom">
+                    <div class="h-60 bg-gradient-to-r from-amber-100 to-yellow-200 flex items-center justify-center">
+                        <img class="h-40 w-40 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FFC400' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FFC400' opacity='0.5'/%3E%3C/svg%3E" alt="Sunglasses">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-bold text-dark">Designer Sunglasses</h3>
+                                <p class="text-gray-600 text-sm mt-1">UV Protection Style</p>
+                            </div>
+                            <div>
+                                <span class="text-xl font-bold text-accent">$59.99</span>
+                                <span class="line-through text-gray-400 text-sm block">$79.99</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button class="bg-primary hover:bg-accent text-white py-2 px-4 rounded-lg flex items-center transition-colors">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Add to Cart
+                            </button>
+                            <button class="text-gray-500 hover:text-primary">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 product-zoom">
+                    <div class="h-60 bg-gradient-to-r from-emerald-100 to-green-200 flex items-center justify-center">
+                        <img class="h-40 w-40 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2300C897' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%2300C897' opacity='0.5'/%3E%3C/svg%3E" alt="Running Shoes">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-bold text-dark">Running Shoes</h3>
+                                <p class="text-gray-600 text-sm mt-1">Comfort & Performance</p>
+                            </div>
+                            <div>
+                                <span class="text-xl font-bold text-accent">$79.99</span>
+                                <span class="line-through text-gray-400 text-sm block">$99.99</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <button class="bg-primary hover:bg-accent text-white py-2 px-4 rounded-lg flex items-center transition-colors">
+                                <i class="fas fa-shopping-cart mr-2"></i>
+                                Add to Cart
+                            </button>
+                            <button class="text-gray-500 hover:text-primary">
+                                <i class="far fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Section -->
+    <section class="py-12 bg-gradient-to-r from-primary to-secondary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex items-center justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">Limited Time Offer</h2>
+                    <p class="text-xl opacity-90">Get 30% OFF on all summer collections</p>
+                </div>
+                <div class="flex items-center">
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-bold">03</div>
+                        <div class="opacity-80">Days</div>
+                    </div>
+                    <div class="text-3xl opacity-70">:</div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-bold">12</div>
+                        <div class="opacity-80">Hours</div>
+                    </div>
+                    <div class="text-3xl opacity-70">:</div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-bold">45</div>
+                        <div class="opacity-80">Minutes</div>
+                    </div>
+                    <div class="text-3xl opacity-70">:</div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-bold">28</div>
+                        <div class="opacity-80">Seconds</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Panel -->
+    <div class="cart-panel fixed top-0 right-0 w-full md:w-96 h-full bg-white shadow-2xl z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-dark">Your Cart (3)</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-accent">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Cart Item 1 -->
+                <div class="flex items-center border-b pb-6">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-100 to-blue-200 rounded-md flex items-center justify-center">
+                        <img class="h-12 w-12 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230075FF' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%230075FF' opacity='0.5'/%3E%3C/svg%3E" alt="Wireless Headphones">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <h3 class="font-medium text-gray-900">Wireless Headphones</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-primary font-bold">$89.99</span>
+                            <div class="flex items-center">
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-2">1</span>
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Item 2 -->
+                <div class="flex items-center border-b pb-6">
+                    <div class="w-20 h-20 bg-gradient-to-r from-rose-100 to-pink-200 rounded-md flex items-center justify-center">
+                        <img class="h-12 w-12 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FF0071' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%23FF0071' opacity='0.5'/%3E%3C/svg%3E" alt="Smart Watch">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <h3 class="font-medium text-gray-900">Smart Watch</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-primary font-bold">$129.99</span>
+                            <div class="flex items-center">
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-2">1</span>
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Item 3 -->
+                <div class="flex items-center pb-6">
+                    <div class="w-20 h-20 bg-gradient-to-r from-emerald-100 to-green-200 rounded-md flex items-center justify-center">
+                        <img class="h-12 w-12 object-contain" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2300C897' opacity='0.2'/%3E%3Ccircle cx='50' cy='50' r='40' fill='%2300C897' opacity='0.5'/%3E%3C/svg%3E" alt="Running Shoes">
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <h3 class="font-medium text-gray-900">Running Shoes</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-primary font-bold">$79.99</span>
+                            <div class="flex items-center">
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="mx-2">1</span>
+                                <button class="text-gray-500 hover:text-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cart Summary -->
+            <div class="mt-8 border-t pt-6">
+                <div class="flex justify-between text-lg mb-4">
+                    <span>Subtotal:</span>
+                    <span class="font-bold">$299.97</span>
+                </div>
+                <div class="flex justify-between text-lg mb-4">
+                    <span>Shipping:</span>
+                    <span class="font-bold">$5.99</span>
+                </div>
+                <div class="flex justify-between text-xl font-bold mt-6 mb-8">
+                    <span>Total:</span>
+                    <span>$305.96</span>
+                </div>
+                <button class="w-full bg-primary hover:bg-accent text-white py-4 rounded-lg font-bold text-lg transition-colors">
+                    Proceed to Checkout
+                </button>
+                <button class="w-full mt-3 border-2 border-primary text-primary py-4 rounded-lg font-bold text-lg hover:bg-primary hover:text-white transition-colors">
+                    Continue Shopping
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop for Cart Panel -->
+    <div id="cart-backdrop" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40"></div>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-dark text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
+            <p class="text-gray-300 mb-8 max-w-2xl mx-auto">Be the first to know about our new arrivals, special offers, and other updates</p>
+            
+            <div class="flex flex-col sm:flex-row max-w-md mx-auto sm:max-w-xl">
+                <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 rounded-l-lg sm:rounded-l sm:rounded-r-none text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                <button class="mt-2 sm:mt-0 bg-primary hover:bg-secondary py-3 px-6 font-medium rounded-r-lg sm:rounded-l-none sm:rounded-r transition-colors">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-darker text-gray-300 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4">ShopSphere</h3>
+                    <p class="mb-4">Premium e-commerce destination for the latest trends in fashion, electronics, and more.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-pinterest-p"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-white">FAQs</a></li>
+                        <li><a href="#" class="hover:text-white">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-white">Returns & Exchanges</a></li>
+                        <li><a href="#" class="hover:text-white">Product Care</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">My Account</a></li>
+                        <li><a href="#" class="hover:text-white">Track Order</a></li>
+                        <li><a href="#" class="hover:text-white">Wishlist</a></li>
+                        <li><a href="#" class="hover:text-white">Gift Cards</a></li>
+                        <li><a href="#" class="hover:text-white">Size Guide</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Contact Info</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>123 Fashion Street, Los Angeles, CA 90210</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3"></i>
+                            <span>(800) 555-1234</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3"></i>
+                            <span>support@shopsphere.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-clock mt-1 mr-3"></i>
+                            <span>Mon-Fri: 9am - 8pm EST</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-sm text-center">
+                <p>&copy; 2023 ShopSphere. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile navigation
+        const mobileMenuBtn = document.getElementById('mobile-menu');
+        const mobileNav = document.getElementById('mobile-nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('hidden');
+        });
+        
+        // Toggle cart panel
+        const cartToggle = document.getElementById('cart-toggle');
+        const cartPanel = document.querySelector('.cart-panel');
+        const closeCart = document.getElementById('close-cart');
+        const cartBackdrop = document.getElementById('cart-backdrop');
+        
+        cartToggle.addEventListener('click', () => {
+            cartPanel.classList.add('open');
+            cartBackdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeCart.addEventListener('click', () => {
+            cartPanel.classList.remove('open');
+            cartBackdrop.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+        
+        cartBackdrop.addEventListener('click', () => {
+            cartPanel.classList.remove('open');
+            cartBackdrop.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+        
+        // Product card hover effect
+        const productCards = document.querySelectorAll('.product-zoom');
+        productCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const img = card.querySelector('img');
+                img.classList.add('scale-105');
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const img = card.querySelector('img');
+                img.classList.remove('scale-105');
+            });
+        });
+    </script>
+</body>
+</html>
